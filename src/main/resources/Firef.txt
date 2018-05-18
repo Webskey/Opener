@@ -1,0 +1,1 @@
+{ "name" : "Firefox", "path" : "C:/Program Files/Mozilla Firefox/firefox.exe/", "options" : ["www.google.pl", "blaugrana.pl"] }

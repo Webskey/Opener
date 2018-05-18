@@ -1,1 +1,1 @@
-C:/Program Files/Mozilla Firefox/firefox.exe/
+{ "name" : "VLC", "path" : "C:/Program Files (x86)/VideoLAN/VLC/vlc.exe", "options" : [] }

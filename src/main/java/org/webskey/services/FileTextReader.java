@@ -5,17 +5,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class FileTextReader {
-	/*public static void main(String[] args) {
-		FileTextReader fr = new FileTextReader();
-		String s = fr.getFile("q.txt");
-		System.out.println(s);
-	}*/
+public class FileTextReader {	
 	
-	public String getFile2() {
+	public String getFile(File file) {
 		StringBuilder sb = new StringBuilder();
 		try {
-			File file = new File("src/main/resources/q.txt");
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 			String line="";
 			while ((line = bufferedReader.readLine()) != null) {
