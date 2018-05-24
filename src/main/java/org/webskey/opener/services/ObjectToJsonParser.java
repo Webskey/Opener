@@ -1,8 +1,8 @@
-package org.webskey.services;
+package org.webskey.opener.services;
 
 import java.io.IOException;
 
-import org.webskey.model.Program;
+import org.webskey.opener.model.Program;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

@@ -1,13 +1,7 @@
-package org.webskey.opener;
+package org.webskey.opener.gui;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import org.webskey.model.Program;
-import org.webskey.services.FileTxtWriter;
-import org.webskey.services.ObjectToJsonParser;
+import org.webskey.opener.model.Program;
+import org.webskey.opener.services.FileTextWriter;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -18,50 +12,43 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class SecondStage extends Stage {
+public class SaveWindow extends Stage {
 
-	public SecondStage() {
-		FileTxtWriter ftw = new FileTxtWriter();
-		ObjectToJsonParser objectToJsonParser = new ObjectToJsonParser();
+	public SaveWindow() {
+		FileTextWriter ftw = new FileTextWriter();		
 		Program program = new Program();
-		
+
+		//Name
 		Label nameInfoLabel = new Label("Podaj nazwe programu:");
 		TextField nameTextField = new TextField();
+		//Path
 		Label pathInfoLabel = new Label("Podaj sciezke do programu:");
 		TextField pathTextField = new TextField();
+		//Options
 		Label optionsInfoLabel = new Label("Podaj opcje:");
 		TextField optionsTextField = new TextField();
+		//Directory
+		Label directoryInfoLabel = new Label("Podaj directory:");
+		TextField directoryTextField = new TextField();
+		//ButtonConfirm
 		Button confirm = new Button("Dodaj");
 		confirm.setOnAction((event) -> {
 			program.setName(nameTextField.getText());
 			program.setPath(pathTextField.getText());
+			program.setDirectory(directoryTextField.getText());
 			String[] arr = optionsTextField.getText().split(" ");
 			program.setOptions(arr);
-			try {
-				ftw.write(objectToJsonParser.parse(program), create(program));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+
+			ftw.write(program);
 			close();
 		});
 		VBox vBox = new VBox();
 		vBox.setSpacing(10);
-		
+
 		ObservableList<Node> list = vBox.getChildren(); 
-		list.addAll(nameInfoLabel, nameTextField, pathInfoLabel, pathTextField, optionsInfoLabel, optionsTextField, confirm);
-		
+		list.addAll(nameInfoLabel, nameTextField, pathInfoLabel, pathTextField, optionsInfoLabel, optionsTextField, directoryInfoLabel, directoryTextField, confirm);
+
 		setScene(new Scene(vBox, 300, 300));
 		setAlwaysOnTop(true);
-	}
-	
-	public Path create(Program program) {
-		String path = "src/main/resources/" + program.getName() + ".txt";
-		Path fpath = null;
-		 try {
-			fpath = Files.createFile(Paths.get(path));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		 return fpath;
 	}
 }

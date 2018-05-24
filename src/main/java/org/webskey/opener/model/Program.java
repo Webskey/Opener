@@ -1,10 +1,11 @@
-package org.webskey.model;
+package org.webskey.opener.model;
 
 public class Program {
 	
 	private String name;
 	private String path;
 	private String[] options;
+	private String directory;
 	
 	public String getName() {
 		return name;
@@ -23,5 +24,11 @@ public class Program {
 	}
 	public void setOptions(String[] options) {
 		this.options = options;
+	}
+	public String getDirectory() {
+		return directory;
+	}
+	public void setDirectory(String directory) {
+		this.directory = directory;
 	}
 }
