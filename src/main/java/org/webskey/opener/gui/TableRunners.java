@@ -54,7 +54,6 @@ public class TableRunners extends TableView<Program>{
 			data.clear();
 			data.addAll(mc.getProgramList());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

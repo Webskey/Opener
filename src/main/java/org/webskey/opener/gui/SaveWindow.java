@@ -13,8 +13,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class SaveWindow extends Stage {
-
-	public SaveWindow() {
+	
+	private String path;
+	
+	public SaveWindow(TableRunners tr) {
 		FileTextWriter ftw = new FileTextWriter();		
 		Program program = new Program();
 
@@ -36,10 +38,10 @@ public class SaveWindow extends Stage {
 			program.setName(nameTextField.getText());
 			program.setPath(pathTextField.getText());
 			program.setDirectory(directoryTextField.getText());
-			String[] arr = optionsTextField.getText().split(" ");
-			program.setOptions(arr);
+			program.setOptions(optionsTextField.getText());
 
-			ftw.write(program);
+			ftw.write(path, program);
+			tr.create();
 			close();
 		});
 		VBox vBox = new VBox();
@@ -50,5 +52,9 @@ public class SaveWindow extends Stage {
 
 		setScene(new Scene(vBox, 300, 300));
 		setAlwaysOnTop(true);
+	}
+	
+	public void setPath(String path) {
+		this.path = path;
 	}
 }

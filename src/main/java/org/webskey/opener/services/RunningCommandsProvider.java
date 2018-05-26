@@ -26,7 +26,7 @@ public class RunningCommandsProvider {
 	public String[] getPathOptions() {
 		List<String> list = new ArrayList<>();
 		list.add(program.getPath());
-		list.addAll(Arrays.asList(program.getOptions()));
+		list.addAll(Arrays.asList(program.getOptions().split(" ")));
 		
 		return list.toArray(new String[0]);
 	}

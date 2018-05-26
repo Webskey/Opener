@@ -4,7 +4,7 @@ public class Program {
 	
 	private String name;
 	private String path;
-	private String[] options;
+	private String options;
 	private String directory;
 	
 	public String getName() {
@@ -19,10 +19,10 @@ public class Program {
 	public void setPath(String path) {
 		this.path = path;
 	}
-	public String[] getOptions() {
+	public String getOptions() {
 		return options;
 	}
-	public void setOptions(String[] options) {
+	public void setOptions(String options) {
 		this.options = options;
 	}
 	public String getDirectory() {

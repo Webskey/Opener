@@ -16,13 +16,13 @@ public class FileTextWriter {
 		objectToJsonParser = new ObjectToJsonParser();	
 	}
 
-	public void write(Program program) {
+	public void write(String path, Program program) {
 		//String path = "data/" + program.getName() + ".txt";
-		String path = "src/main/resources/first/" + program.getName() + ".txt";
+		String filePath = path + program.getName() + ".txt";
 
 		create(program.getName());
 
-		File file = new File(path.toString());
+		File file = new File(filePath.toString());
 		try (FileWriter  output = new FileWriter(file, true);) {	
 			output.append(objectToJsonParser.parse(program)); 
 			output.flush();			
@@ -35,6 +35,15 @@ public class FileTextWriter {
 		try {
 			Files.createFile(Paths.get(path));
 		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void delete(String path, String fileName) {
+		try {
+			File file = new File(path + "\\" + fileName + ".txt.");
+			file.delete();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
