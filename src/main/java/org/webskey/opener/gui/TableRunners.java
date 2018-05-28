@@ -36,7 +36,7 @@ public class TableRunners extends TableView<Program>{
 		getColumns().addAll(name, path, options);
 		getSelectionModel().getSelectedItems();
 		
-		create();
+		//create();
 		
 		setPrefWidth(560);
 	}

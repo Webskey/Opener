@@ -4,11 +4,13 @@ import java.io.File;
 
 import org.webskey.opener.gui.SaveWindow;
 import org.webskey.opener.gui.TableRunners;
+import org.webskey.opener.services.FilePath;
 import org.webskey.opener.services.FileTextWriter;
 import org.webskey.opener.services.MajorClass;
 import org.webskey.opener.services.RuntimeRunner;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -25,29 +27,24 @@ public class Main extends Application {
 		try {
 			MajorClass mc = new MajorClass();
 			RuntimeRunner runtime = new RuntimeRunner();
-			FileTextWriter fileTextWriter = new FileTextWriter();
-			
-			//File folder = new File("data/");
-			//File folder = new File("src/main/resources/first");
-			
+			FileTextWriter fileTextWriter = new FileTextWriter();	
 			//ButtonRun
 			Button buttonRun = new Button("RUN");
 			buttonRun.setOnAction((event) -> {				
-				for (File fileEntry : mc.getFoldero().listFiles()) 
+				for (File fileEntry : mc.getFolder().listFiles()) 
 					runtime.run(fileEntry);	
+					Platform.exit();
 			});					
 			//TableRunners
 			TableRunners tableRunners = new TableRunners(mc);
-			//Projects ComboBox
-			File ProjectsFolder = new File("src/main/resources/Projects");
-			//File ProjectsFolder = new File("data/Projects");
+			//Projects ComboBox			
+			File ProjectsFolder = new File(FilePath.filePath());
 			ComboBox<Object> projectsCombo = new ComboBox<Object>();
 			for (File fileEntry : ProjectsFolder.listFiles()) {
 				projectsCombo.getItems().add(fileEntry.getName());
 			}
-			projectsCombo.valueProperty().addListener((ObservableValue<?> ov, Object prevValue, Object currValue)-> {
-				//mc.setFolder("src/main/resources/Projects/" + currValue);
-				mc.setFolder("data/Projects/" + currValue);
+			projectsCombo.valueProperty().addListener((ObservableValue<?> ov, Object prevValue, Object currValue)-> {				
+				mc.setFolder(FilePath.filePath() + currValue);
 				tableRunners.create();
 			    });
 			projectsCombo.setValue(projectsCombo.getItems().get(0));
@@ -57,12 +54,12 @@ public class Main extends Application {
 			Button buttonAdd = new Button("ADD");
 			buttonAdd.setOnAction((event) -> {				
 				addWindow.show();
-				addWindow.setPath(mc.getFoldero().toString() + "\\");
+				addWindow.setPath(mc.getFolder().toString() + "\\");
 			});	
 			//ButtonRemove
 			Button buttonRemove = new Button("Remove");
 			buttonRemove.setOnAction((event) -> {		
-				fileTextWriter.delete(mc.getFoldero().toString() , tableRunners.getSelectionModel().getSelectedItem().getName());
+				fileTextWriter.delete(mc.getFolder().toString() , tableRunners.getSelectionModel().getSelectedItem().getName());
 				tableRunners.remowe(tableRunners.getSelectionModel().getSelectedItem());				
 			});			
 			//LOOK
@@ -73,7 +70,7 @@ public class Main extends Application {
 			root.setSpacing(15);
 			root.setPadding(new Insets(50, 50, 50, 50));
 			
-			Scene scene = new Scene(root, 600, 300);			
+			Scene scene = new Scene(root, 600, 600);			
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();

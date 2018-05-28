@@ -26,6 +26,7 @@ public class RunningCommandsProvider {
 	public String[] getPathOptions() {
 		List<String> list = new ArrayList<>();
 		list.add(program.getPath());
+		if(!program.getOptions().equals(""))
 		list.addAll(Arrays.asList(program.getOptions().split(" ")));
 		
 		return list.toArray(new String[0]);
@@ -33,15 +34,5 @@ public class RunningCommandsProvider {
 	
 	public String getDirectory() {
 		return program.getDirectory();
-	}
-	
-	public String[] getRuns(File file) throws IOException {
-		
-		program = jsonToObjectParser.parse(fileTextReader.getFile(file));		
-		List<String> list = new ArrayList<>();
-		list.add(program.getPath());
-		list.addAll(Arrays.asList(program.getOptions()));
-		
-		return list.toArray(new String[0]);
 	}
 }
