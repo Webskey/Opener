@@ -38,7 +38,7 @@ public class FileTextWriter {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public void delete(String path, String fileName) {
 		try {
 			File file = new File(path + "\\" + fileName + ".txt.");

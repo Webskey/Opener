@@ -5,4 +5,3 @@
 * Java 8
 * JavaFX
 * Jackson
-* 

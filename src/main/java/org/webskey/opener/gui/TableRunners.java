@@ -11,7 +11,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-
 public class TableRunners extends TableView<Program>{
 	ObservableList<Program> data = FXCollections.observableArrayList();
 	MajorClass mc;

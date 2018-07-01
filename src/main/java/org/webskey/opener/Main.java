@@ -1,5 +1,5 @@
 package org.webskey.opener;
-	
+
 import java.io.File;
 
 import org.webskey.opener.gui.SaveWindow;
@@ -7,6 +7,7 @@ import org.webskey.opener.gui.TableRunners;
 import org.webskey.opener.services.FilePath;
 import org.webskey.opener.services.FileTextWriter;
 import org.webskey.opener.services.MajorClass;
+import org.webskey.opener.services.MakeChange;
 import org.webskey.opener.services.RuntimeRunner;
 
 import javafx.application.Application;
@@ -33,7 +34,7 @@ public class Main extends Application {
 			buttonRun.setOnAction((event) -> {				
 				for (File fileEntry : mc.getFolder().listFiles()) 
 					runtime.run(fileEntry);	
-					Platform.exit();
+				Platform.exit();
 			});					
 			//TableRunners
 			TableRunners tableRunners = new TableRunners(mc);
@@ -46,7 +47,7 @@ public class Main extends Application {
 			projectsCombo.valueProperty().addListener((ObservableValue<?> ov, Object prevValue, Object currValue)-> {				
 				mc.setFolder(FilePath.filePath() + currValue);
 				tableRunners.create();
-			    });
+			});
 			projectsCombo.setValue(projectsCombo.getItems().get(0));
 			//AddWindow
 			SaveWindow addWindow = new SaveWindow(tableRunners);   
@@ -61,15 +62,24 @@ public class Main extends Application {
 			buttonRemove.setOnAction((event) -> {		
 				fileTextWriter.delete(mc.getFolder().toString() , tableRunners.getSelectionModel().getSelectedItem().getName());
 				tableRunners.remowe(tableRunners.getSelectionModel().getSelectedItem());				
+			});		
+			MakeChange makeChange = new MakeChange();
+			//ButtonChange
+			Button buttonChange = new Button("Change");
+			buttonChange.setOnAction((event) -> {
+				makeChange.changing(mc.getFolder().toString() + "\\" + tableRunners.getSelectionModel().getSelectedItem().getName() + ".txt.");
+				System.out.println(mc.getFolder().toString() + "\\" + tableRunners.getSelectionModel().getSelectedItem().getName() + ".txt.");
+				//ChangeWindow changeWindow = new ChangeWindow(mc.getFolder().toString() + "\\" + tableRunners.getSelectionModel().getSelectedItem().getName() + ".txt."); 
+				//changeWindow.setPath(mc.getFolder().toString() + "\\" + tableRunners.getSelectionModel().getSelectedItem().getName() + ".txt.");	
 			});			
 			//LOOK
-			HBox hBox = new HBox(buttonAdd, buttonRemove);
+			HBox hBox = new HBox(buttonAdd, buttonRemove, buttonChange);
 			hBox.setSpacing(5);
-			
+
 			VBox root = new VBox(projectsCombo, buttonRun, tableRunners, hBox);
 			root.setSpacing(15);
 			root.setPadding(new Insets(50, 50, 50, 50));
-			
+
 			Scene scene = new Scene(root, 600, 600);			
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
@@ -80,7 +90,7 @@ public class Main extends Application {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
