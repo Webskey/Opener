@@ -2,12 +2,11 @@ package org.webskey.opener;
 
 import java.io.File;
 
+import org.webskey.opener.dao.FileCrud;
+import org.webskey.opener.gui.ChangeWindow;
 import org.webskey.opener.gui.SaveWindow;
 import org.webskey.opener.gui.TableRunners;
-import org.webskey.opener.services.FilePath;
-import org.webskey.opener.services.FileTextWriter;
 import org.webskey.opener.services.MajorClass;
-import org.webskey.opener.services.MakeChange;
 import org.webskey.opener.services.RuntimeRunner;
 
 import javafx.application.Application;
@@ -28,9 +27,9 @@ public class Main extends Application {
 		try {
 			MajorClass mc = new MajorClass();
 			RuntimeRunner runtime = new RuntimeRunner();
-			FileTextWriter fileTextWriter = new FileTextWriter();	
+			FileCrud fileCrud = new FileCrud();	
 			//ButtonRun
-			Button buttonRun = new Button("RUN");
+			Button buttonRun = new Button("Uruchom");
 			buttonRun.setOnAction((event) -> {				
 				for (File fileEntry : mc.getFolder().listFiles()) 
 					runtime.run(fileEntry);	
@@ -39,39 +38,37 @@ public class Main extends Application {
 			//TableRunners
 			TableRunners tableRunners = new TableRunners(mc);
 			//Projects ComboBox			
-			File ProjectsFolder = new File(FilePath.filePath());
+			File ProjectsFolder = fileCrud.dataFile();
 			ComboBox<Object> projectsCombo = new ComboBox<Object>();
 			for (File fileEntry : ProjectsFolder.listFiles()) {
 				projectsCombo.getItems().add(fileEntry.getName());
 			}
 			projectsCombo.valueProperty().addListener((ObservableValue<?> ov, Object prevValue, Object currValue)-> {				
-				mc.setFolder(FilePath.filePath() + currValue);
+				mc.setFolder(fileCrud.getPath() + currValue);
 				tableRunners.create();
 			});
 			projectsCombo.setValue(projectsCombo.getItems().get(0));
 			//AddWindow
 			SaveWindow addWindow = new SaveWindow(tableRunners);   
 			//ButtonAdd
-			Button buttonAdd = new Button("ADD");
+			Button buttonAdd = new Button("Dodaj");
 			buttonAdd.setOnAction((event) -> {				
 				addWindow.show();
 				addWindow.setPath(mc.getFolder().toString() + "\\");
 			});	
 			//ButtonRemove
-			Button buttonRemove = new Button("Remove");
-			buttonRemove.setOnAction((event) -> {		
-				fileTextWriter.delete(mc.getFolder().toString() , tableRunners.getSelectionModel().getSelectedItem().getName());
+			Button buttonRemove = new Button("Usun");
+			buttonRemove.setOnAction((event) -> {
+				fileCrud.delete(mc.getFolder().toString() + "\\" + tableRunners.getSelectionModel().getSelectedItem().getName() + ".txt");
 				tableRunners.remowe(tableRunners.getSelectionModel().getSelectedItem());				
 			});		
-			MakeChange makeChange = new MakeChange();
+			//ChangeWindow
+			ChangeWindow changeWindow = new ChangeWindow(tableRunners);
 			//ButtonChange
-			Button buttonChange = new Button("Change");
+			Button buttonChange = new Button("Zmien");
 			buttonChange.setOnAction((event) -> {
-				makeChange.changing(mc.getFolder().toString() + "\\" + tableRunners.getSelectionModel().getSelectedItem().getName() + ".txt.");
-				System.out.println(mc.getFolder().toString() + "\\" + tableRunners.getSelectionModel().getSelectedItem().getName() + ".txt.");
-				//ChangeWindow changeWindow = new ChangeWindow(mc.getFolder().toString() + "\\" + tableRunners.getSelectionModel().getSelectedItem().getName() + ".txt."); 
-				//changeWindow.setPath(mc.getFolder().toString() + "\\" + tableRunners.getSelectionModel().getSelectedItem().getName() + ".txt.");	
-			});			
+				changeWindow.setWindow(mc.getFolder().toString() + "\\", tableRunners.getSelectionModel().getSelectedItem().getName() + ".txt");
+			});	
 			//LOOK
 			HBox hBox = new HBox(buttonAdd, buttonRemove, buttonChange);
 			hBox.setSpacing(5);

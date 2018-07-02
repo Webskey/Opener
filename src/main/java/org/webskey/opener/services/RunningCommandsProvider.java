@@ -6,21 +6,20 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.webskey.opener.dao.FileCrud;
 import org.webskey.opener.model.Program;
 
 public class RunningCommandsProvider {
 	
-	private JsonToObjectParser jsonToObjectParser;
 	private Program program;
-	private FileTextReader fileTextReader;
+	private FileCrud fileCrud;
 	
 	public RunningCommandsProvider() {
-		jsonToObjectParser = new JsonToObjectParser();
-		fileTextReader = new FileTextReader();
+		fileCrud = new FileCrud();
 	}
 	
 	public void parse(File file) throws IOException {
-		program = jsonToObjectParser.parse(fileTextReader.getFile(file));		
+		program = fileCrud.read(file);		
 	}
 	
 	public String[] getPathOptions() {

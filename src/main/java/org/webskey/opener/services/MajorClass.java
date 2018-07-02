@@ -5,13 +5,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.webskey.opener.dao.FileCrud;
 import org.webskey.opener.model.Program;
 
 public class MajorClass {
-	RuntimeRunner runtime = new RuntimeRunner();
-	JsonToObjectParser jsonToObjectParser;
-	FileTextReader fileTextReader;
-	File folder;
+	private FileCrud fileCrud;
+	private File folder;
 	 
 	 public void setFolder(String path) {
 		 this.folder = new File(path);
@@ -23,11 +22,10 @@ public class MajorClass {
 	 
 	 public List<Program> getProgramList() throws IOException{
 		 List<Program> list = new ArrayList<>();
-		 jsonToObjectParser = new JsonToObjectParser();
-		 fileTextReader = new FileTextReader();
+		 fileCrud = new FileCrud();
 		 File file = getFolder();
 		 for (File fileEntry : file.listFiles()) {
-				list.add(jsonToObjectParser.parse(fileTextReader.getFile(fileEntry)));
+				list.add(fileCrud.read(fileEntry));
 			}
 		 return list;
 	 }

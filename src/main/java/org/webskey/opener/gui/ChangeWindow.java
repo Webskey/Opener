@@ -1,7 +1,7 @@
 package org.webskey.opener.gui;
 
+import org.webskey.opener.dao.FileCrud;
 import org.webskey.opener.model.Program;
-import org.webskey.opener.services.FileTextWriter;
 
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
@@ -14,34 +14,43 @@ import javafx.stage.Stage;
 
 public class ChangeWindow extends Stage {
 
-	public ChangeWindow(Program program, String path) {
-		FileTextWriter ftw = new FileTextWriter();		
-		
+	private FileCrud fileCrud;
+	private Program program;
+	private String path;
+	private TextField nameTextField;
+	private TextField pathTextField;
+	private TextField optionsTextField;
+	private TextField directoryTextField;
+
+	public ChangeWindow(TableRunners table) {
+		fileCrud = new FileCrud();		
+
 		//Name
 		Label nameInfoLabel = new Label("Podaj nazwe programu:");
-		TextField nameTextField = new TextField();
-		nameTextField.setText(program.getName());
+		nameTextField = new TextField();
 		//Path
 		Label pathInfoLabel = new Label("Podaj sciezke do programu:");
-		TextField pathTextField = new TextField();
-		pathTextField.setText(program.getPath());
+		pathTextField = new TextField();
 		//Options
 		Label optionsInfoLabel = new Label("Podaj opcje:");
-		TextField optionsTextField = new TextField();
-		optionsTextField.setText(program.getOptions());
+		optionsTextField = new TextField();
 		//Directory
 		Label directoryInfoLabel = new Label("Podaj directory:");
-		TextField directoryTextField = new TextField();
-		directoryTextField.setText(program.getDirectory());
+		directoryTextField = new TextField();
 		//ButtonConfirm
-		Button confirm = new Button("Dodaj");
+		Button confirm = new Button("Zmien");
 		confirm.setOnAction((event) -> {
+			String name = program.getName();
 			program.setName(nameTextField.getText());
 			program.setPath(pathTextField.getText());
 			program.setDirectory(directoryTextField.getText());
 			program.setOptions(optionsTextField.getText());
 
-			ftw.write(path, program);
+			if(program.getName().equals(name)) 
+				fileCrud.update(path, program);
+			else 
+				fileCrud.replace(path, name, program);
+			table.create();
 			close();
 		});
 		VBox vBox = new VBox();
@@ -49,8 +58,19 @@ public class ChangeWindow extends Stage {
 
 		ObservableList<Node> list = vBox.getChildren(); 
 		list.addAll(nameInfoLabel, nameTextField, pathInfoLabel, pathTextField, optionsInfoLabel, optionsTextField, directoryInfoLabel, directoryTextField, confirm);
-
+		
+		setTitle("Zmien program");
 		setScene(new Scene(vBox, 300, 300));
 		setAlwaysOnTop(true);
+	}
+
+	public void setWindow(String path, String fileName) {
+		program = fileCrud.read(path + fileName);
+		this.path = path;
+		nameTextField.setText(program.getName());
+		pathTextField.setText(program.getPath());
+		optionsTextField.setText(program.getOptions());
+		directoryTextField.setText(program.getDirectory());
+		show();
 	}
 }
