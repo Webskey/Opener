@@ -1,1 +1,0 @@
-{"name":"txt","path":"q.txt","options":"","directory":"C:\\Users\\Lukasz\\Desktop\\"}

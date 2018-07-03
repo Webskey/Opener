@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import org.apache.commons.io.FileUtils;
 import org.webskey.opener.model.Program;
 import org.webskey.opener.services.JsonToObjectParser;
 import org.webskey.opener.services.ObjectToJsonParser;
@@ -80,12 +81,28 @@ public class FileCrud {
 			e.printStackTrace();
 		}
 	}
+	
+	public void createDirectory(String path, String name) {
+		try {
+			Files.createDirectories(Paths.get(path + name));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void delete(String path) {
 		try {
 			File file = new File(path);
 			file.delete();
 		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteDirectory(String path) {
+		try {
+			FileUtils.deleteDirectory(new File(path));
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -105,5 +122,10 @@ public class FileCrud {
 	public void replace(String path, String fileName, Program program) {
 		delete(path + fileName +".txt");		
 		write(path, program);
+	}
+	
+	public void renameDirectory(String path, String oldName, String newName) {
+		File file = new File(path + oldName);
+		file.renameTo(new File(path + newName));
 	}
 }
