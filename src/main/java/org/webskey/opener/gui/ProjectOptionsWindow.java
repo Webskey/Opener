@@ -3,6 +3,7 @@ package org.webskey.opener.gui;
 import java.util.Optional;
 
 import org.webskey.opener.dao.FileCrud;
+import org.webskey.opener.model.FilesPaths;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -27,7 +28,6 @@ public class ProjectOptionsWindow extends Stage {
 		dialog.initModality(Modality.APPLICATION_MODAL);
 		dialog.setTitle("Dodaj/Zmien");
 		dialog.setContentText("Podaj nazwe:");
-		
 		//projectList
 		Label projectListInfoLabel = new Label("Lista projektow:");
 		ListView<String> projectList = new ListView<String>();
@@ -37,7 +37,7 @@ public class ProjectOptionsWindow extends Stage {
 		//Delete
 		Button removeButton = new Button("Usun zaznaczone");
 		removeButton.setOnAction((event) -> {
-			fileCrud.deleteDirectory(fileCrud.getPath() + projectList.getSelectionModel().getSelectedItem());
+			fileCrud.deleteDirectory(FilesPaths.getPath() + projectList.getSelectionModel().getSelectedItem());
 			comboBox.getItems().remove(projectList.getSelectionModel().getSelectedItem());
 			projectList.getItems().remove(projectList.getSelectionModel().getSelectedItem());
 		});
@@ -48,7 +48,7 @@ public class ProjectOptionsWindow extends Stage {
 			dialog.getEditor().setText(projectList.getSelectionModel().getSelectedItem());
 			Optional<String> result = dialog.showAndWait();
 			result.ifPresent(newName -> {
-				fileCrud.renameDirectory(fileCrud.getPath(), projectList.getSelectionModel().getSelectedItem(), newName);
+				fileCrud.renameDirectory(FilesPaths.getPath(), projectList.getSelectionModel().getSelectedItem(), newName);
 				comboBox.getItems().set(comboBox.getItems().indexOf(projectList.getSelectionModel().getSelectedItem()), newName);
 				projectList.getItems().set(projectList.getItems().indexOf(projectList.getSelectionModel().getSelectedItem()), newName);
 			});
@@ -59,7 +59,7 @@ public class ProjectOptionsWindow extends Stage {
 			dialog.setHeaderText("Dodawanie nowego projektu");
 			Optional<String> result = dialog.showAndWait();
 			result.ifPresent(name -> {
-				fileCrud.createDirectory(fileCrud.getPath(), name);
+				fileCrud.createDirectory(FilesPaths.getPath(), name);
 				comboBox.getItems().add(name);
 				projectList.getItems().add(name);
 			});

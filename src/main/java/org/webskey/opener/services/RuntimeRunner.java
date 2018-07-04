@@ -1,29 +1,20 @@
 package org.webskey.opener.services;
 
-import java.io.File;
 import java.io.IOException;
 
-public class RuntimeRunner {
+import org.webskey.opener.model.Program;
 
-	private RunningCommandsProvider runningCommandsProvider;
+public class RuntimeRunner implements Runner{
 
-	public RuntimeRunner() {
-		runningCommandsProvider = new RunningCommandsProvider();			
-	}
+	@Override
+	public void run(Program program) throws IOException {
+		String[] options = program.getOptions().split(" ");
+		String[] commands = new String[1 + options.length];
+		commands[0] = program.getPath();
 
-	public void run(File file) {			
-		try {
-			runningCommandsProvider.parse(file);
-			String[] command = runningCommandsProvider.getPathOptions();
-			File directory = null;
-			if(runningCommandsProvider.getDirectory() != null)
-				directory = new File(runningCommandsProvider.getDirectory());
-			if(command.length < 2)
-				Runtime.getRuntime().exec(command[0], null, directory);
-			else
-				Runtime.getRuntime().exec(command, null, directory);
-		} catch (IOException e) {			
-			e.printStackTrace();
-		}
+		for(int i = 1; i < commands.length; i++)
+			commands[i] = options[i - 1];
+		
+		Runtime.getRuntime().exec(commands);
 	}
 }

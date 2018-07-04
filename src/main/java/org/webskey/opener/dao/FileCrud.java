@@ -11,33 +11,21 @@ import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
 import org.webskey.opener.model.Program;
-import org.webskey.opener.services.JsonToObjectParser;
-import org.webskey.opener.services.ObjectToJsonParser;
+import org.webskey.opener.services.JsonObjectsParser;
 
 public class FileCrud {
 
-	private ObjectToJsonParser objectToJsonParser;
-	private JsonToObjectParser jsonToObjectParser;
+	private JsonObjectsParser jsonParser;
 
 	public FileCrud() {
-		objectToJsonParser = new ObjectToJsonParser();	
-		jsonToObjectParser = new JsonToObjectParser();	
-	}
-
-	public String getPath() {
-		return "src/main/resources/Projects/";
-		//return "data/Projects/";
-	}
-	
-	public File dataFile() {
-		return new File(getPath());
+		jsonParser = new JsonObjectsParser();	
 	}
 
 	public void write(String path, Program program) {
 		String filePath = path + program.getName() + ".txt";
 		File file = new File(filePath);
 		try (FileWriter  output = new FileWriter(file, true);) {	
-			output.append(objectToJsonParser.parse(program)); 
+			output.append(jsonParser.parse(program)); 
 			output.flush();			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -51,7 +39,7 @@ public class FileCrud {
 			while ((line = bufferedReader.readLine()) != null) 
 				sb.append(line);
 
-			return jsonToObjectParser.parse(sb.toString());
+			return jsonParser.parse(sb.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new Program();
@@ -66,21 +54,12 @@ public class FileCrud {
 			while ((line = bufferedReader.readLine()) != null) 
 				sb.append(line);
 
-			return jsonToObjectParser.parse(sb.toString());
+			return jsonParser.parse(sb.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 			return new Program();
 		}
 	}	
-
-	public void create(String path) {		
-		try {
-			Files.createFile(Paths.get(path));
-			System.out.println("CREATED");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 	
 	public void createDirectory(String path, String name) {
 		try {
@@ -108,11 +87,11 @@ public class FileCrud {
 	}
 
 	public void update(String path, Program program) {
-		File file = new File(path + program.getName() + ".txt");	
+		File file = new File(path);	
 		try (FileWriter  output = new FileWriter(file, true);
 				PrintWriter writer = new PrintWriter(file);) {
 			writer.print("");
-			output.append(objectToJsonParser.parse(program)); 
+			output.append(jsonParser.parse(program)); 
 			output.flush();			
 		} catch (IOException e) {
 			e.printStackTrace();
